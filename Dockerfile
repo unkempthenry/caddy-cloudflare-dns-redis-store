@@ -1,12 +1,13 @@
-FROM caddy:2-builder AS builder
+FROM caddy:2.11.4-builder AS builder
 
-ARG CADDY_VERSION
-
-RUN xcaddy build ${CADDY_VERSION:+${CADDY_VERSION}} \
-    --with github.com/caddy-dns/cloudflare \
-    --with github.com/pberkel/caddy-storage-redis
+RUN xcaddy build v2.11.4 \
+    --with github.com/caddy-dns/cloudflare@a8737d095ad5a48ca031cea6ab704057dbc2d250 \
+    --with github.com/pberkel/caddy-storage-redis@a9100c777a8a0be9e6e6203328b15fd9c2ed4e06
     # --with github.com/greenpau/caddy-security
 
-FROM caddy:2-alpine
+# caddy-dns/cloudflare v0.2.4
+# pberkel/caddy-storage-redis v1.8.0
+
+FROM caddy:2.11.4-alpine
 
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
